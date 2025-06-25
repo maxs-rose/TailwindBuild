@@ -28,7 +28,7 @@
         <RepositoryType>git</RepositoryType>
         <Copyright>Copyright © $(Company) $([System.DateTime]::Now.ToString(yyyy))</Copyright>
     </PropertyGroup>
-    
+
     <PropertyGroup Label="Versioning">
         <MinVerMinimumMajorMinor>0.1</MinVerMinimumMajorMinor>
         <MinVerTagPrefix>v</MinVerTagPrefix>
@@ -50,7 +50,7 @@
 
     <ItemGroup>
         <Content Remove="build\TailwindBuild.props" PackagePath="build\"/>
-        <Content Include="build\TailwindBuild.props" PackagePath="build\"/>
+        <Content Include="build\TailwindBuild.targets" PackagePath="build\"/>
     </ItemGroup>
 
     <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
