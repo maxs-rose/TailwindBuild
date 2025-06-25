@@ -22,6 +22,9 @@ public sealed class DownloadTailwindCli : Task
 
     public override bool Execute()
     {
+        if (!ValidateVersion.IsValid(Version))
+            throw new ArgumentOutOfRangeException($"Invalid version {Version}. Must be within v4.x.x");
+
         var cts = new CancellationTokenSource();
 
         try
@@ -74,6 +77,9 @@ public sealed class DownloadTailwindCli : Task
 
         if (!releaseResponse.IsSuccessful || releaseResponse.Content is null)
             throw new Exception($"Could not find TailwindCLI release for {releaseVersion}");
+
+        if (!ValidateVersion.IsValid(Version))
+            throw new ArgumentOutOfRangeException($"Invalid version {Version}. Must be within v4.x.x");
 
         _cliPath = Path.Combine(RootPath, releaseResponse.Content.Version);
 
