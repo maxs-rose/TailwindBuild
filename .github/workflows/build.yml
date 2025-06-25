@@ -1,6 +1,9 @@
 on:
   push:
 
+env:
+  CI: "true"
+
 jobs:
   build:
     name: Build

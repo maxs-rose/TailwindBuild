@@ -9,6 +9,7 @@ namespace TailwindBuild.Test.Tasks;
 public sealed class DownloadTailwindCliTest : IDisposable
 {
     private readonly DirectoryInfo _tempDir = Directory.CreateTempSubdirectory();
+    private readonly string IsCi = Environment.GetEnvironmentVariable("CI") ?? string.Empty;
 
     public void Dispose()
     {
@@ -18,6 +19,8 @@ public sealed class DownloadTailwindCliTest : IDisposable
     [Fact]
     private async Task ShouldDownloadLatest()
     {
+        Assert.SkipWhen(IsCi == "true", "Skipping on CI");
+
         // Setup
         var client = RestService.For<ITailwindClient>("https://api.github.com");
         var latestVersionResponse = await client.GetLatest(CancellationToken.None);
@@ -45,6 +48,8 @@ public sealed class DownloadTailwindCliTest : IDisposable
     [Fact]
     private async Task ShouldDownloadSpecificVersion()
     {
+        Assert.SkipWhen(IsCi == "true", "Skipping on CI");
+
         // Setup
         var client = RestService.For<ITailwindClient>("https://api.github.com");
         var latestVersionResponse = await client.GetVersion("v4.1.7", CancellationToken.None);
