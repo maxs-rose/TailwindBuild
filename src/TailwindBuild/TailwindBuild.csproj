@@ -13,7 +13,7 @@
         <DebugType>embedded</DebugType>
         <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
         <NoWarn>NU5100;NU5128</NoWarn>
-        <Version>1.0.5</Version>
+        <Version>1.0.0</Version>
     </PropertyGroup>
 
     <PropertyGroup Label="Package/Assembly Manifest Properties">
