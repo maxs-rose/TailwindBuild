@@ -83,12 +83,6 @@ public sealed class DownloadTailwindCli : Task
 
         _cliPath = Path.Combine(RootPath, releaseResponse.Content.Version);
 
-        if (File.Exists(StandaloneCliPath) && CLiLocation == StandaloneCliPath)
-        {
-            Log.LogMessage(MessageImportance.Normal, "Using cached cli located at: {0}", StandaloneCliPath);
-            return null;
-        }
-
         var fileName = FileName ?? SystemInfo.GetFileName();
 
         var asset = releaseResponse.Content.Assets.FirstOrDefault(r => string.Equals(r.Name, fileName, StringComparison.InvariantCultureIgnoreCase))
@@ -97,8 +91,14 @@ public sealed class DownloadTailwindCli : Task
         return asset.Id;
     }
 
-    private async System.Threading.Tasks.Task Download(ITailwindClient client, ulong assetId, CancellationToken cancellationToken)
+    private async ValueTask Download(ITailwindClient client, ulong assetId, CancellationToken cancellationToken)
     {
+        if (File.Exists(StandaloneCliPath) && CLiLocation == StandaloneCliPath)
+        {
+            Log.LogMessage(MessageImportance.Normal, "Using cached cli located at: {0}", StandaloneCliPath);
+            return;
+        }
+
         Directory.CreateDirectory(_cliPath);
         var data = await client.DownloadAsset(assetId, cancellationToken);
 
