@@ -21,7 +21,7 @@ jobs:
       - name: Pack
         run: dotnet pack -c Release --output nupkgs --no-build
       - name: Publish Artifacts
-        run: actions/upload-artifacts@v4
+        uses: actions/upload-artifacts@v4
         with:
           name: latest
           path: ./nupkgs/*.nupkg
