@@ -33,7 +33,7 @@ jobs:
   push-guthub:
     name: Push GitHub Nuget
     needs: build
-    if: github.ref == 'refs/heads/master' && github.event_name == 'release'
+    if: github.event_name == 'release'
     environment:
       name: "GitHub"
       url: https://github.com/${{ github.repository }}/packages
