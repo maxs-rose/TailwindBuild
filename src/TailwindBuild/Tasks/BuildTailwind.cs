@@ -34,13 +34,12 @@ public sealed class BuildTailwind : Task
         }
 
         Cli.Wrap(StandaloneCliPath)
+            .WithEnvironmentVariables(new Dictionary<string, string?>
+            {
+                { "NO_COLOR", "true" }
+            })
             .WithWorkingDirectory(WorkingDir)
-            .WithArguments([
-                $"-i {InputFile}",
-                $"-o {OutputFile}",
-                $"{(Minify ? "--minify" : string.Empty)}",
-                $"{(Watch ? "--watch" : string.Empty)}"
-            ])
+            .WithArguments($"-i {InputFile} -o {OutputFile} {(Minify ? "--minify" : string.Empty)} {(Watch ? "--watch" : string.Empty)}")
             .WithStandardOutputPipe(PipeTarget.ToDelegate(x =>
             {
                 if (!string.IsNullOrWhiteSpace(x))

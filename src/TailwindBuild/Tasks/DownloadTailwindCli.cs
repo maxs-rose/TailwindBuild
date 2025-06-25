@@ -12,7 +12,7 @@ public sealed class DownloadTailwindCli : Task
 {
     [Required] public string Version { get; set; } = string.Empty;
     [Required] public string RootPath { get; set; } = string.Empty;
-    [Required] public string? FileName { get; set; }
+    public string? FileName { get; set; }
 
 
     [Output] public string StandaloneCliPath { get; set; } = string.Empty;
@@ -117,7 +117,7 @@ public sealed class DownloadTailwindCli : Task
             .WithStandardErrorPipe(PipeTarget.ToDelegate(x =>
             {
                 if (!string.IsNullOrWhiteSpace(x))
-                    Log.LogError(x);
+                    Log.LogMessage(MessageImportance.High, x);
             }))
             .ExecuteAsync();
     }

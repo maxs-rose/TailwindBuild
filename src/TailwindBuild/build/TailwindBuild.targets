@@ -8,7 +8,7 @@
 
         <BuildTailwind
                 StandaloneCliPath="$(StandaloneCliPath)"
-                WorkikngDir="$(TailwindWorkingDir)"
+                WorkingDir="$(TailwindWorkingDir)"
                 InputFile="$(TailwindInputFile)"
                 OutputFile="$(TailwindOutputFile)"
                 Minify="$(TailwindMinify)"
