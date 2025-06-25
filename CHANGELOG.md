@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/maxs-rose/TailwindBuild/compare/v1.1.1...v1.2.0) (2025-06-25)
+
+
+### Features
+
+* Update to better handle latest versions ([2574637](https://github.com/maxs-rose/TailwindBuild/commit/257463743d4c43224903cec057349d3e26f58750))
+
 ## [1.1.1](https://github.com/maxs-rose/TailwindBuild/compare/v1.1.0...v1.1.1) (2025-06-25)
 
 
