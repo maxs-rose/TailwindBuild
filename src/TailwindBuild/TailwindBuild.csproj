@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -9,7 +10,9 @@
         <DevelopmentDependency>true</DevelopmentDependency>
         <IsPackable>true</IsPackable>
         <PackageDescription>Tailwind CSS for MSBuild</PackageDescription>
+        <DebugType>embedded</DebugType>
         <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+        <NoWarn>NU5100;NU5128</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
