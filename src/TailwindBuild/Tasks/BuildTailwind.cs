@@ -48,7 +48,7 @@ public sealed class BuildTailwind : Task
             .WithStandardErrorPipe(PipeTarget.ToDelegate(x =>
             {
                 if (!string.IsNullOrWhiteSpace(x))
-                    Log.LogError(x);
+                    Log.LogMessage(MessageImportance.High, x);
             }))
             .ExecuteAsync()
             .GetAwaiter()

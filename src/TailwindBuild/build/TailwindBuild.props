@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
-        <TailwindBuildAssembly Condition="'$(TailwindBuildAssembly)' == ''">..\tasks\netstandard2.0\$(MSBuildThisFileName).dll</TailwindBuildAssembly>
+        <TailwindBuildAssembly Condition="'$(TailwindBuildAssembly)' == ''">..\tasks\net9.0\$(MSBuildThisFileName).dll</TailwindBuildAssembly>
     </PropertyGroup>
 
     <UsingTask TaskName="TailwindBuild.Tasks.DownloadTailwindCli" AssemblyFile="$(TailwindBuildAssembly)"/>

@@ -95,8 +95,8 @@ public sealed class DownloadTailwindCli : Task
 
         await data.EnsureSuccessStatusCodeAsync();
 
-        using var outputFile = File.Create(CLiLocation);
-        await data.Content!.CopyToAsync(outputFile);
+        await using var outputFile = File.Create(CLiLocation);
+        await data.Content!.CopyToAsync(outputFile, cancellationToken);
         outputFile.Close();
 
         await SetPosixFilePermissions();

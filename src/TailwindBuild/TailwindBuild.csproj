@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -13,8 +13,7 @@
         <DebugType>embedded</DebugType>
         <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
         <NoWarn>NU5100;NU5128</NoWarn>
-        <Version>1.0.4</Version>
-        <LangVersion>latest</LangVersion>
+        <Version>1.0.5</Version>
     </PropertyGroup>
 
     <PropertyGroup Label="Package/Assembly Manifest Properties">
@@ -51,7 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Remove="build\TailwindBuild.props" PackagePath="build\"/>
+        <Content Include="build\TailwindBuild.props" PackagePath="build\"/>
         <Content Include="build\TailwindBuild.targets" PackagePath="build\"/>
     </ItemGroup>
 
