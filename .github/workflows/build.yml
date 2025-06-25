@@ -5,6 +5,9 @@ on:
   release:
     types: [ published ]
 
+env:
+  MINVERBUILDMETADATA: build.${{github.run_number}}
+
 jobs:
   build:
     name: Build Package
