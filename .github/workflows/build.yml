@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - main
+      - master
 
 jobs:
   build:
@@ -24,3 +25,23 @@ jobs:
         with:
           name: latest
           path: ./nupkgs/*.nupkg
+  
+  push-guthub:
+    name: Push GitHub Nuget
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'release'
+    environment:
+      name: "GitHub"
+      url: https://github.com/${{ github.repository }}/packages
+    permissions:
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: latest
+      - name: Dotnet NuGet Add Source
+        run: dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --name github --username ${{ github.repository_owner }} --password ${{ secrets.GITHUB_TOKEN }}
+      - name: Dotnet NuGet Push
+        run: dotnet nuget push *.nupkg --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --source github --skip-duplicate
