@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <TailwindBuildAssembly Condition="'$(TailwindBuildAssembly)' == ''">..\tasks\netstandard2.0\$(MSBuildThisFileName).dll</TailwindBuildAssembly>
+    </PropertyGroup>
+
+    <UsingTask TaskName="TailwindBuild.Tasks.DownloadTailwindCli" AssemblyFile="$(TailwindBuildAssembly)"/>
+    <UsingTask TaskName="TailwindBuild.Tasks.BuildTailwind" AssemblyFile="$(TailwindBuildAssembly)"/>
+
+    <PropertyGroup Label="Tailwind">
+        <TailwindVersion Condition="'$(TailwindVersion)' == ''">latest</TailwindVersion>
+        <TailwindWorkingDir Condition="'$(TailwindConfigDir)' == ''">$(MSBuildProjectDirectory)</TailwindWorkingDir>
+        <TailwindInstallPath Condition="'$(TailwindInstallPath)' == ''">$(MSBuildThisFileDirectory)..\cli\</TailwindInstallPath>
+        <TailwindInputFile Condition="'$(TailwindInputFile)' == ''">tailwind.css</TailwindInputFile>
+        <TailwindOutputFile Condition="'$(TailwindOutputFile)' == ''">$(MSBuildProjectDirectory)\wwwroot\css\output.css</TailwindOutputFile>
+        <TailwindMinify Condition="'$(TailwindMinify)' == '' AND '$(Configuration)' == 'Debug'">false</TailwindMinify>
+        <TailwindMinify Condition="'$(TailwindMinify)' == '' AND '$(Configuration)' == 'Release'">true</TailwindMinify>
+        <TailwindWatch Condition="'$(TailwindWatch)' == '' AND '$(DotNetWatchBuild)' == 'true'">true</TailwindWatch>
+        <TailwindWatch Condition="'$(TailwindWatch)' == ''">false</TailwindWatch>
+    </PropertyGroup>
+
+</Project>

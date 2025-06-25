@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <Target Name="BuildTailwind" BeforeTargets="BeforeBuild">
+        <DownloadTailwindCli Version="$(TailwindVersion)" RootPath="$(TailwindInstallPath)" FileName="$(TailwindCliFileName)">
+            <Output TaskParameter="StandaloneCliPath" PropertyName="StandaloneCliPath"/>
+        </DownloadTailwindCli>
+
+        <BuildTailwind
+                StandaloneCliPath="$(StandaloneCliPath)"
+                WorkikngDir="$(TailwindWorkingDir)"
+                InputFile="$(TailwindInputFile)"
+                OutputFile="$(TailwindOutputFile)"
+                Minify="$(TailwindMinify)"
+                Watch="$(TailwindWatch)">
+            <Output TaskParameter="GeneratedCssFile" PropertyName="GeneratedCssFile"/>
+        </BuildTailwind>
+    </Target>
+
+</Project>
