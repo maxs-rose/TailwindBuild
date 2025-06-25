@@ -66,13 +66,11 @@ public sealed class DownloadTailwindCli : Task
         string releaseVersion,
         CancellationToken cancellationToken)
     {
-        var releaseResponse = await client.GetReleases(
-            releaseVersion switch
-            {
-                "latest" => "latest",
-                _ => $"tags/{releaseVersion}"
-            },
-            cancellationToken);
+        var releaseResponse = await (releaseVersion switch
+        {
+            "latest" => client.GetLatest(cancellationToken),
+            _ => client.GetVersion(releaseVersion, cancellationToken)
+        });
 
         if (!releaseResponse.IsSuccessful || releaseResponse.Content is null)
             throw new Exception($"Could not find TailwindCLI release for {releaseVersion}");
