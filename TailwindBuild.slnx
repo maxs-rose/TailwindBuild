@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src\TailwindBuild\TailwindBuild.csproj" Type="Classic C#" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="test\TailwindBuild.Test\TailwindBuild.Test.csproj" Type="Classic C#" />
+  </Folder>
 </Solution>

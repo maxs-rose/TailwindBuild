@@ -13,7 +13,7 @@ jobs:
         with:
           dotnet-version: |
             9.0.x
-            
+
       - name: Cache NuGet Packages
         uses: actions/cache@v4
         with:
@@ -23,4 +23,7 @@ jobs:
             ${{ runner.os }}-nuget
 
       - name: Build
-        run: dotnet build -c Release
+        run: dotnet build
+
+      - name: Test
+        run: dotnet test --no-build
