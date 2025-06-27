@@ -14,6 +14,7 @@
         <DebugType>embedded</DebugType>
         <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
         <NoWarn>NU5100;NU5128</NoWarn>
+        <LangVersion>preview</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

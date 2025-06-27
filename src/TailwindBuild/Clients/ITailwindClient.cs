@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Refit;
 using TailwindBuild.Models;
 
@@ -15,4 +16,23 @@ internal interface ITailwindClient
     [Headers("Accept: application/octet-stream")]
     [Get("/repos/tailwindlabs/tailwindcss/releases/assets/{asset}")]
     Task<ApiResponse<Stream>> DownloadAsset(ulong asset, CancellationToken cancellationToken = default);
+}
+
+internal class AuthenticationHandler : DelegatingHandler
+{
+    private readonly string? _authToken;
+
+    public AuthenticationHandler(string? authToken)
+    {
+        _authToken = authToken;
+        InnerHandler = new HttpClientHandler();
+    }
+
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        if (!string.IsNullOrWhiteSpace(_authToken))
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _authToken);
+
+        return base.SendAsync(request, cancellationToken);
+    }
 }
