@@ -14,7 +14,18 @@ public sealed class DownloadTailwindCli : Task
 
     [Required] public string Version { get; set; } = string.Empty;
     [Required] public string RootPath { get; set; } = string.Empty;
-    public string? FileName { get; set; }
+
+    public string? FileName
+    {
+        set;
+        get => string.IsNullOrWhiteSpace(field) ? null : field;
+    }
+
+    public string? AuthToken
+    {
+        set;
+        get => string.IsNullOrWhiteSpace(field) ? null : field;
+    }
 
     [Output] public string StandaloneCliPath { get; set; } = string.Empty;
 
@@ -48,7 +59,10 @@ public sealed class DownloadTailwindCli : Task
 
     private async Task<bool> ExecuteAsync(CancellationToken cancellationToken)
     {
-        var client = RestService.For<ITailwindClient>("https://api.github.com");
+        var client = RestService.For<ITailwindClient>(new HttpClient(new AuthenticationHandler(AuthToken))
+        {
+            BaseAddress = new Uri("https://api.github.com")
+        });
 
         var releaseAsset = await GetAsset(client, Version, cancellationToken);
 

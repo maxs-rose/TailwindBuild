@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <Target Name="BuildTailwind" BeforeTargets="BeforeBuild">
-        <DownloadTailwindCli Version="$(TailwindVersion)" RootPath="$(TailwindInstallPath)" FileName="$(TailwindCliFileName)">
+        <DownloadTailwindCli Version="$(TailwindVersion)" RootPath="$(TailwindInstallPath)" FileName="$(TailwindCliFileName)" AuthToken="$(TailwindGithubAuthToken)">
             <Output TaskParameter="StandaloneCliPath" PropertyName="StandaloneCliPath"/>
         </DownloadTailwindCli>
 

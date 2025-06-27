@@ -2,7 +2,7 @@ on:
   push:
 
 env:
-  CI: "true"
+  GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
