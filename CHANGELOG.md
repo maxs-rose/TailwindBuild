@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/maxs-rose/TailwindBuild/compare/v1.3.0...v1.3.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* Add option to pass authetnicaton token to github client ([#5](https://github.com/maxs-rose/TailwindBuild/issues/5)) ([1a7a012](https://github.com/maxs-rose/TailwindBuild/commit/1a7a012ca8e43a50f6c674f4f1ff793339e149fc))
+
 ## [1.3.0](https://github.com/maxs-rose/TailwindBuild/compare/v1.2.0...v1.3.0) (2025-06-25)
 
 
