@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-    <Target Name="BuildTailwind" BeforeTargets="BeforeBuild">
+    <Target Name="BuildTailwind" BeforeTargets="BeforeBuild" Inputs="$(TailwindInputFile);@(Compile);@(Content)" Outputs="$(TailwindOutputFile)">
         <DownloadTailwindCli Version="$(TailwindVersion)" RootPath="$(TailwindInstallPath)" FileName="$(TailwindCliFileName)" AuthToken="$(TailwindGithubAuthToken)">
             <Output TaskParameter="StandaloneCliPath" PropertyName="StandaloneCliPath"/>
         </DownloadTailwindCli>
@@ -12,9 +12,7 @@
                 InputFile="$(TailwindInputFile)"
                 OutputFile="$(TailwindOutputFile)"
                 Minify="$(TailwindMinify)"
-                Watch="$(TailwindWatch)">
-            <Output TaskParameter="GeneratedCssFile" PropertyName="GeneratedCssFile"/>
-        </BuildTailwind>
+                Watch="$(TailwindWatch)"/>
     </Target>
 
 </Project>

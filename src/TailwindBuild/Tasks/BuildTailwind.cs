@@ -17,8 +17,6 @@ public sealed class BuildTailwind : Task
 
     [Required] public bool Watch { get; set; }
 
-    [Output] public string GeneratedCssFile { get; set; } = string.Empty;
-
     public override bool Execute()
     {
         if (!File.Exists(StandaloneCliPath))
@@ -53,8 +51,6 @@ public sealed class BuildTailwind : Task
             .ExecuteAsync()
             .GetAwaiter()
             .GetResult();
-
-        GeneratedCssFile = OutputFile;
 
         return !Log.HasLoggedErrors;
     }
