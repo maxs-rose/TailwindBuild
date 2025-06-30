@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.2](https://github.com/maxs-rose/TailwindBuild/compare/v1.3.1...v1.3.2) (2025-06-30)
+
+
+### Bug Fixes
+
+* Correct input and outputs for task ([8511039](https://github.com/maxs-rose/TailwindBuild/commit/85110390d9d68e0e80af28dea5103700e1a2275e))
+* Correct issue where download output was not being set ([4dff82a](https://github.com/maxs-rose/TailwindBuild/commit/4dff82a3405fc44d169e6266ac534899c2797bbd))
+
 ## [1.3.1](https://github.com/maxs-rose/TailwindBuild/compare/v1.3.0...v1.3.1) (2025-06-27)
 
 
