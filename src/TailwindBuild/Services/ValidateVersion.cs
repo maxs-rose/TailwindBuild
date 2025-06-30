@@ -6,4 +6,12 @@ internal sealed class ValidateVersion
     {
         return version == "latest" || version.StartsWith("v4.");
     }
+
+    public static bool IsInstalled(string version, string location)
+    {
+        if (version == "latest")
+            return false;
+
+        return File.Exists(location);
+    }
 }

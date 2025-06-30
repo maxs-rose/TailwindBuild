@@ -18,7 +18,7 @@ public sealed class DownloadTailwindCli : Task
     public string? FileName
     {
         set;
-        get => string.IsNullOrWhiteSpace(field) ? null : field;
+        get => string.IsNullOrWhiteSpace(field) ? SystemInfo.GetFileName() : field;
     }
 
     public string? AuthToken
@@ -29,32 +29,23 @@ public sealed class DownloadTailwindCli : Task
 
     [Output] public string StandaloneCliPath { get; set; } = string.Empty;
 
-    private string CLiLocation => Path.Combine(_cliPath, FileName ?? SystemInfo.GetFileName());
-
     public override bool Execute()
     {
         if (!ValidateVersion.IsValid(Version))
             throw new ArgumentOutOfRangeException($"Invalid version {Version}. Must be within v4.x.x");
 
-        var cts = new CancellationTokenSource();
+        var expectedPath = Path.Combine(RootPath, Version, FileName!);
 
-        try
+        if (ValidateVersion.IsInstalled(Version, expectedPath))
         {
-            var result = ExecuteAsync(cts.Token).GetAwaiter().GetResult();
-            StandaloneCliPath = CLiLocation;
-
-            return result && !Log.HasLoggedErrors;
-        }
-        catch
-        {
-            cts.Cancel();
-        }
-        finally
-        {
-            cts.Dispose();
+            Log.LogMessage("Using cached CLI version for {0} at {1}", Version, StandaloneCliPath);
+            StandaloneCliPath = expectedPath;
+            return true;
         }
 
-        return !Log.HasLoggedErrors;
+        var result = ExecuteAsync(CancellationToken.None).GetAwaiter().GetResult();
+
+        return result && !Log.HasLoggedErrors;
     }
 
     private async Task<bool> ExecuteAsync(CancellationToken cancellationToken)
@@ -66,19 +57,18 @@ public sealed class DownloadTailwindCli : Task
 
         var releaseAsset = await GetAsset(client, Version, cancellationToken);
 
-        if (releaseAsset is null)
-            return true;
+        _cliPath = Path.Combine(RootPath, releaseAsset.Version);
+        StandaloneCliPath = Path.Combine(_cliPath, FileName!);
 
-        Log.LogMessage(MessageImportance.Low, "Downloading: {0}", releaseAsset);
-
-        await Download(client, releaseAsset.Value, cancellationToken);
-
-        Log.LogMessage(MessageImportance.Low, "Downloaded: {0}", releaseAsset);
+        if (!ValidateVersion.IsInstalled(releaseAsset.Version, StandaloneCliPath))
+            await Download(client, releaseAsset.AssetId, cancellationToken);
+        else
+            Log.LogMessage("Using cached CLI version for {0} at {1}", Version, StandaloneCliPath);
 
         return true;
     }
 
-    private async Task<ulong?> GetAsset(
+    private async Task<(string Version, ulong AssetId)> GetAsset(
         ITailwindClient client,
         string releaseVersion,
         CancellationToken cancellationToken)
@@ -90,35 +80,25 @@ public sealed class DownloadTailwindCli : Task
         });
 
         if (!releaseResponse.IsSuccessful || releaseResponse.Content is null)
-            throw new Exception($"Could not find TailwindCLI release for {releaseVersion}");
+            throw new Exception($"Could not find TailwindCLI release for {releaseVersion} {releaseResponse.ReasonPhrase}");
 
         if (!ValidateVersion.IsValid(Version))
             throw new ArgumentOutOfRangeException($"Invalid version {Version}. Must be within v4.x.x");
 
-        _cliPath = Path.Combine(RootPath, releaseResponse.Content.Version);
+        var asset = releaseResponse.Content.Assets.FirstOrDefault(r => string.Equals(r.Name, FileName, StringComparison.InvariantCultureIgnoreCase))
+                    ?? throw new Exception($"Could not find TailwindCLI release asset with name {FileName}");
 
-        var fileName = FileName ?? SystemInfo.GetFileName();
-
-        var asset = releaseResponse.Content.Assets.FirstOrDefault(r => string.Equals(r.Name, fileName, StringComparison.InvariantCultureIgnoreCase))
-                    ?? throw new Exception($"Could not find TailwindCLI release asset with name {fileName}");
-
-        return asset.Id;
+        return (releaseResponse.Content.Version, asset.Id);
     }
 
     private async ValueTask Download(ITailwindClient client, ulong assetId, CancellationToken cancellationToken)
     {
-        if (File.Exists(StandaloneCliPath) && CLiLocation == StandaloneCliPath)
-        {
-            Log.LogMessage(MessageImportance.Normal, "Using cached cli located at: {0}", StandaloneCliPath);
-            return;
-        }
-
         Directory.CreateDirectory(_cliPath);
         var data = await client.DownloadAsset(assetId, cancellationToken);
 
         await data.EnsureSuccessStatusCodeAsync();
 
-        await using var outputFile = File.Create(CLiLocation);
+        await using var outputFile = File.Create(StandaloneCliPath);
         await data.Content!.CopyToAsync(outputFile, cancellationToken);
         outputFile.Close();
 
@@ -131,7 +111,7 @@ public sealed class DownloadTailwindCli : Task
             return;
 
         await Cli.Wrap("chmod")
-            .WithArguments($"-x {CLiLocation}")
+            .WithArguments($"-x {StandaloneCliPath}")
             .WithStandardOutputPipe(PipeTarget.ToDelegate(x =>
             {
                 if (!string.IsNullOrWhiteSpace(x))
